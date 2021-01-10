@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Masonry Grid</title>
+		<script src="https://unpkg.com/vue@next"></script>
+		<style>
+
+		*{
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		ul{
+			padding: 0px;
+			margin: 20px;
+			width: calc(100% - 40px);
+			list-style: none;
+		}
+
+		li{
+			position: absolute;
+			display: inline-block;
+			transition: transform 0.3s ease;
+		}
+
+		</style>
+	</head>
+	<body>
+		<h1>Grid</h1>
+		<div id="masonry_grid">
+			<ul id="masonry_list">
+				<li v-for="child in children" class="masonry_item" v-bind:id="'masonry_item_' + child.id">
+					{{ child.value }}
+				</li>
+			</ul>
+			<button v-on:click="addElement">Add Element</button>
+		</div>
+
+		<script src="main.js"></script>
+		<script>
+			const MasonryGrid = {
+				data(){
+					return{
+						children: [],
+					}
+				},
+				methods: {
+					addElement() {
+						next_id = this.children.length;
+
+						let num_words = Math.floor(Math.random() * 80) + 100;
+						let value = ""
+						let rand_length = Math.floor(Math.random() * 8) + 1;
+						for(let i=0; i<num_words; i++){
+							if (rand_length > 0){
+								rand_length--;
+								value += "a";
+							}else{
+								value += " ";
+								rand_length = Math.floor(Math.random() * 8) + 1;
+							}
+						}
+						this.children.push({value: value, id: next_id});
+					}
+				}
+			}
+
+			Vue.createApp(MasonryGrid).mount("#masonry_grid");
+
+			var list = new MasonryList("masonry_list", 3);
+		</script>
+	</body>
+</html>
