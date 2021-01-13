@@ -1,6 +1,7 @@
 
 class MasonryList {
 	children = [];
+	heights = [];
 
     constructor(elementId, maxColumns, margin){
         // attach variables to object
@@ -23,17 +24,17 @@ class MasonryList {
 
         // reset the list and add the new children
         this.children = [];
+		this.heights = [];
         let index = 0;
-        let tallest = 0;
 
         // loop through all the children
         for(let child of children){
             // make child and set position and width
-            let childObject = new MasonryItem(child);
+            let childObject = new MasonryItem(child, this.margin);
 			this.resizeElement(childObject, children, index);
 
             // calculate the new height of the ul to stop overflow
-			tallest = this.newHeight(tallest, childObject.element.offsetHeight);
+			this.newHeight(childObject.getHeight(), index);
 
             // add child to the array and increase the index
             this.children.push(childObject);
@@ -41,13 +42,9 @@ class MasonryList {
         }
     }
 
-	newHeight(tallest, currentElementHeight){
-		if(currentElementHeight > tallest){
-			this.element.style.height = currentElementHeight + "px";
-			return currentElementHeight;
-		}else{
-			return tallest;
-		}
+	newHeight(currentElementHeight, index){
+		this.heights[index % this.maxColumns] = (isNaN(this.heights[index % this.maxColumns])) ? currentElementHeight : this.heights[index % this.maxColumns] += currentElementHeight;
+		this.element.style.height = Math.max.apply(Math, this.heights) + "px";
 	}
 
 	resizeElement(childObject, children, index){
@@ -67,6 +64,7 @@ class MasonryList {
 		// resize all the elements in the list
 		let index = 0;
 		let tallest = 0;
+		this.heights = [];
 
 		// loop through all children
 		for(let child of this.children){
@@ -74,7 +72,7 @@ class MasonryList {
 			this.resizeElement(child, this.children, index);
 
 			// calculate the new height of the ul to stop overflow
-			tallest = this.newHeight(tallest, child.element.offsetHeight);
+			this.newHeight(child.getHeight(), index);
 
 			index++;
 		}
@@ -91,9 +89,9 @@ class MasonryList {
 
 class MasonryItem {
 
-	constructor(element, parent){
+	constructor(element, margin){
 		this.element = element;
-		this.parent = parent;
+		this.margin = margin;
 	}
 
     setWidthAndPosition(width_px, index, changeInY, changeInX){
@@ -105,6 +103,10 @@ class MasonryItem {
         // calculate the positon (x and y)
         this.element.style.transform = "translateX(" + changeInX + "px) translateY(" + changeInY + "px)";
     }
+
+	getHeight(){
+		return this.element.offsetHeight + this.margin;
+	}
 
 	// return the height cobmined with the elemetn
 	getTotalY(){
