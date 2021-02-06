@@ -1,3 +1,4 @@
+// test commit
 
 class MasonryList {
 	children = [];
@@ -116,7 +117,7 @@ class MasonryItem {
 	}
 
 	/*
-		Set width and 
+		Set width and
 	*/
     setWidthAndPosition(width_px, index, changeInY, changeInX){
         this.element.style.width = width_px + "px";
