@@ -44,7 +44,7 @@ class MasonryList {
     }
 
 	/*
-	 	Event triggered when the Masonry Grid is
+		Event triggered when the Masonry Grid is
 		resized, going through each element and changing
 		size and columns
 	*/
@@ -117,7 +117,7 @@ class MasonryItem {
 	}
 
 	/*
-		Set width and
+		Set width and height of the child element
 	*/
     setWidthAndPosition(width_px, index, changeInY, changeInX){
         this.element.style.width = width_px + "px";
